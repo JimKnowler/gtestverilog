@@ -67,7 +67,9 @@ namespace gtestverilog {
 		}
 
 		/// @brief set the polarity of i_clk
-		/// @value polarity the value of i_clk in first half-cycle (step) of each tick
+		/// @note clock polarity is defined here as the value of i_clk in the 
+		///       second half-cycle (step) of each tick
+		/// @value polarity the polarity value to apply
 		void setClockPolarity(int polarity) {
 			assert((polarity==1) || (polarity==0));
 			m_clockPolarity = polarity;
