@@ -15,11 +15,11 @@ namespace gtestverilog {
 		TestBench(void) {
 			m_core = std::make_unique<MODULE>();
 			
-			m_stepCount = 0;
+			m_stepCount = 0;	
 			
 			m_core->i_reset_n = 1;
-			m_core->i_clk = 0;
-			m_core->eval();
+			
+			setClockPolarity(0);
 		}
 
 		~TestBench(void) {
@@ -38,11 +38,11 @@ namespace gtestverilog {
 		void tick(size_t numTicks = 1) {
 			for (size_t i=0; i<numTicks; i++) {
 				// rising edge
-				assert(m_core->i_clk == 0);
+				assert(m_core->i_clk == m_clockPolarity);
 				nextStep();
 
 				// falling edge
-				assert(m_core->i_clk == 1);
+				assert(m_core->i_clk != m_clockPolarity);
 				nextStep();
 			}
 		}
@@ -66,15 +66,26 @@ namespace gtestverilog {
 			return m_stepCount;
 		}
 
+		/// @brief set the polarity of i_clk
+		/// @value polarity the value of i_clk in IDLE state (either 0 or 1)
+		void setClockPolarity(int polarity) {
+			assert((polarity==1) || (polarity==0));
+			m_clockPolarity = polarity;
+
+			m_core->i_clk = m_clockPolarity;
+			m_core->eval();
+		}
+
 	protected:
 		virtual void onNextStep() {
 
 		}
 
 	private:
-		uint64_t    m_stepCount;
 		std::unique_ptr<MODULE>		m_core;
 
+		uint64_t    m_stepCount;
+		int 		m_clockPolarity;
 	};
 
 }

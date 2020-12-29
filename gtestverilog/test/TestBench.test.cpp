@@ -80,3 +80,38 @@ TEST(TestBench, ShouldGetStepCount) {
     testBench.tick(3);
     ASSERT_EQ(8, testBench.stepCount());
 }
+
+TEST(TestBench, ShouldSetClockPolarity0) {
+    TestBench<TestCore> testBench;
+    auto& core = testBench.core();
+
+    testBench.setClockPolarity(0);
+    ASSERT_EQ(0, core.i_clk);
+
+    testBench.nextStep();
+    ASSERT_EQ(1, core.i_clk);
+
+    testBench.nextStep();
+    ASSERT_EQ(0, core.i_clk);
+
+    testBench.tick();
+    ASSERT_EQ(0, core.i_clk);
+}
+
+TEST(TestBench, ShouldSetClockPolarity1) {
+    TestBench<TestCore> testBench;
+    auto& core = testBench.core();
+
+    testBench.setClockPolarity(1);
+    ASSERT_EQ(1, core.i_clk);
+
+    testBench.nextStep();
+    ASSERT_EQ(0, core.i_clk);
+
+    testBench.nextStep();
+    ASSERT_EQ(1, core.i_clk);
+
+    testBench.tick();
+    ASSERT_EQ(1, core.i_clk);
+
+}
