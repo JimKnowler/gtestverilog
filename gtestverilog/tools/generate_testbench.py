@@ -60,7 +60,7 @@ namespace {namespace} {{
 
     source_middle = """
     
-    void {name}::onNextStep() {{
+    void {name}::onStep() {{
         using namespace gtestverilog;
 
         Step step;
@@ -127,7 +127,7 @@ namespace {namespace} {{
     class {name} : public ::gtestverilog::TestBench<{verilated_name}> {{
     public:
 
-        virtual void onNextStep() override;
+        virtual void onStep() override;
 
         ::gtestverilog::Trace trace;
 

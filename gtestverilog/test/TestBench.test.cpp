@@ -37,9 +37,9 @@ TEST(TestBench, ShouldTickMultipleTimes) {
     testBench.tick(10);
 }
 
-TEST(TestBench, ShouldNextStep) {
+TEST(TestBench, ShouldStep) {
     TestBench<TestCore> testBench;
-    testBench.nextStep();
+    testBench.step();
 }
 
 TEST(TestBench, ShouldInvokeOnStep) {
@@ -47,17 +47,17 @@ TEST(TestBench, ShouldInvokeOnStep) {
     public:
         int counter = 0;
 
-        virtual void onNextStep() {
+        virtual void onStep() {
             counter += 1;
         }
     };
 
     MyTestBench testBench;
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(1, testBench.counter);
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(2, testBench.counter);
 }
 
@@ -71,10 +71,10 @@ TEST(TestBench, ShouldGetStepCount) {
     TestBench<TestCore> testBench;
     ASSERT_EQ(0, testBench.stepCount());
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(1, testBench.stepCount());
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(2, testBench.stepCount());
 
     testBench.tick(3);
@@ -88,10 +88,10 @@ TEST(TestBench, ShouldSetClockPolarity0) {
     testBench.setClockPolarity(0);
     ASSERT_EQ(0, core.i_clk);
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(1, core.i_clk);
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(0, core.i_clk);
 
     testBench.tick();
@@ -105,10 +105,10 @@ TEST(TestBench, ShouldSetClockPolarity1) {
     testBench.setClockPolarity(1);
     ASSERT_EQ(1, core.i_clk);
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(0, core.i_clk);
 
-    testBench.nextStep();
+    testBench.step();
     ASSERT_EQ(1, core.i_clk);
 
     testBench.tick();

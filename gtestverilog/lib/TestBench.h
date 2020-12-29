@@ -39,23 +39,23 @@ namespace gtestverilog {
 			for (size_t i=0; i<numTicks; i++) {
 				// rising edge
 				assert(m_core->i_clk == m_clockPolarity);
-				nextStep();
+				step();
 
 				// falling edge
 				assert(m_core->i_clk != m_clockPolarity);
-				nextStep();
+				step();
 			}
 		}
 
 		/// @brief simulate a single half clock step
 		/// @note This will invert the current value on port 'i_clk'
-		void nextStep() {
+		void step() {
 			m_core->i_clk = (m_core->i_clk) ? 0 : 1;
 			m_core->eval();
 
 			m_stepCount += 1;
 
-			onNextStep();
+			onStep();
 		}
 
 		MODULE& core() {
@@ -77,9 +77,7 @@ namespace gtestverilog {
 		}
 
 	protected:
-		virtual void onNextStep() {
-
-		}
+		virtual void onStep() {}
 
 	private:
 		std::unique_ptr<MODULE>		m_core;
