@@ -115,3 +115,5 @@ TEST(TestBench, ShouldSetClockPolarity1) {
     ASSERT_EQ(1, core.i_clk);
 
 }
+
+// TODO: test that combinatorial logic is evaluated before modifying clock during each step

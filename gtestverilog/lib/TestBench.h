@@ -50,6 +50,10 @@ namespace gtestverilog {
 		/// @brief simulate a single half clock step
 		/// @note This will invert the current value on port 'i_clk'
 		void step() {
+			// evaluate core to allow combinatorial values to settle first
+			m_core->eval();
+
+			// invert clock and evaluate again
 			m_core->i_clk = (m_core->i_clk) ? 0 : 1;
 			m_core->eval();
 
