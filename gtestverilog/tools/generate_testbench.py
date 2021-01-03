@@ -70,10 +70,19 @@ namespace {namespace} {{
     source_bottom = """
         trace.append(step);
     }}
-}}
-""".format(
 
-)
+    void {name}::onStepSimulate() {{
+        if (callbackSimulate) {{
+            callbackSimulate();
+        }}
+    }}
+
+    void {name}::setCallbackSimulate(CallbackSimulate callback) {{
+        callbackSimulate = callback;
+    }}
+
+}}  // namespace
+""".format(name = args.name)
 
     with open(args.output_source, "w") as file:
         file.write("// my output source\n")
@@ -128,8 +137,15 @@ namespace {namespace} {{
     public:
 
         virtual void onStep() override;
+        virtual void onStepSimulate() override;
+
+        typedef std::function<void()> CallbackSimulate;
+        void setCallbackSimulate(CallbackSimulate callback);
 
         ::gtestverilog::Trace trace;
+
+    private:
+        CallbackSimulate callbackSimulate;
 
     }};
 }}

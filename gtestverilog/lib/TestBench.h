@@ -53,12 +53,19 @@ namespace gtestverilog {
 			// evaluate core to allow combinatorial values to settle first
 			m_core->eval();
 
-			// invert clock and evaluate again
+			// invert clock
 			m_core->i_clk = (m_core->i_clk) ? 0 : 1;
+
+			// notify virtual function - to allow any simulation code to run with the new clock value
+			onStepSimulate();
+
+			// evaluate the core
 			m_core->eval();
 
+			// step is complete
 			m_stepCount += 1;
 
+			// notify virtual function - that step has completed
 			onStep();
 		}
 
@@ -83,6 +90,7 @@ namespace gtestverilog {
 		}
 
 	protected:
+		virtual void onStepSimulate() {}
 		virtual void onStep() {}
 
 	private:

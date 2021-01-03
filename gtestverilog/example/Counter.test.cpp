@@ -11,6 +11,12 @@ namespace {
     class Counter : public ::testing::Test {
     public:
         void SetUp() override {
+            testBench.setCallbackSimulate([this]{
+                auto& core = testBench.core();
+
+                // synchronize 'i_simulate' with 'i_clk'
+                core.i_simulate = core.i_clk;
+            });
         }
         
         void TearDown() override {
@@ -49,6 +55,17 @@ TEST_F(Counter, ShouldIncrementRepeatedly) {
         .port(i_reset_n).signal( "01111111111").repeatEachStep(2)
         .port(i_clk).signal( "10" ).repeat(11)
         .port(o_value).signal( {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10} ).repeatEachStep(2);
+
+    ASSERT_THAT(testBench.trace, MatchesTrace(traceExpected));
+}
+
+TEST_F(Counter, ShouldSimulate) {
+    testBench.reset();
+    testBench.tick(10);
+
+    const Trace traceExpected = TraceBuilder()
+        .port(i_clk).signal( "10" ).repeat(11)
+        .port(i_simulate).signal( "10" ).repeat(11);
 
     ASSERT_THAT(testBench.trace, MatchesTrace(traceExpected));
 }
