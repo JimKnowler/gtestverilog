@@ -4,7 +4,8 @@ module Counter(
     input i_clk,
     input i_reset_n,
     /* verilator lint_off UNUSED */
-    input i_simulate,
+    input i_simulate_combinatorial,
+    input i_simulate_sequential,
     /* verilator lint_on UNUSED */
     
     output [15:0] o_value

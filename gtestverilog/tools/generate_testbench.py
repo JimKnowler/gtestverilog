@@ -71,14 +71,24 @@ namespace {namespace} {{
         trace.append(step);
     }}
 
-    void {name}::onStepSimulate() {{
-        if (callbackSimulate) {{
-            callbackSimulate();
+    void {name}::onStepSimulateCombinatorial() {{
+        if (callbackSimulateCombinatorial) {{
+            callbackSimulateCombinatorial();
         }}
     }}
 
-    void {name}::setCallbackSimulate(CallbackSimulate callback) {{
-        callbackSimulate = callback;
+    void {name}::onStepSimulateSequential() {{
+        if (callbackSimulateSequential) {{
+            callbackSimulateSequential();
+        }}
+    }}
+
+    void {name}::setCallbackSimulateCombinatorial(CallbackSimulate callback) {{
+        callbackSimulateCombinatorial = callback;
+    }}
+
+    void {name}::setCallbackSimulateSequential(CallbackSimulate callback) {{
+        callbackSimulateSequential = callback;
     }}
 
 }}  // namespace
@@ -137,15 +147,18 @@ namespace {namespace} {{
     public:
 
         virtual void onStep() override;
-        virtual void onStepSimulate() override;
+        virtual void onStepSimulateCombinatorial() override;
+        virtual void onStepSimulateSequential() override;
 
         typedef std::function<void()> CallbackSimulate;
-        void setCallbackSimulate(CallbackSimulate callback);
+        void setCallbackSimulateCombinatorial(CallbackSimulate callback);
+        void setCallbackSimulateSequential(CallbackSimulate callback);
 
         ::gtestverilog::Trace trace;
 
     private:
-        CallbackSimulate callbackSimulate;
+        CallbackSimulate callbackSimulateCombinatorial;
+        CallbackSimulate callbackSimulateSequential;
 
     }};
 }}

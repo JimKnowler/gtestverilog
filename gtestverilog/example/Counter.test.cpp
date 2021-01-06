@@ -11,11 +11,18 @@ namespace {
     class Counter : public ::testing::Test {
     public:
         void SetUp() override {
-            testBench.setCallbackSimulate([this]{
+            testBench.setCallbackSimulateCombinatorial([this]{
                 auto& core = testBench.core();
 
-                // synchronize 'i_simulate' with 'i_clk'
-                core.i_simulate = core.i_clk;
+                // synchronize 'i_simulate_combinatorial' with 'i_clk'
+                core.i_simulate_combinatorial = core.i_clk;
+            });
+
+            testBench.setCallbackSimulateSequential([this]{
+                auto& core = testBench.core();
+
+                // synchronize 'i_simulate_sequential' with 'i_clk'
+                core.i_simulate_sequential = core.i_clk;
             });
         }
         
@@ -65,7 +72,8 @@ TEST_F(Counter, ShouldSimulate) {
 
     const Trace traceExpected = TraceBuilder()
         .port(i_clk).signal( "10" ).repeat(11)
-        .port(i_simulate).signal( "10" ).repeat(11);
+        .port(i_simulate_combinatorial).signal( "01" ).repeat(11)
+        .port(i_simulate_sequential).signal( "10" ).repeat(11);
 
     ASSERT_THAT(testBench.trace, MatchesTrace(traceExpected));
 }

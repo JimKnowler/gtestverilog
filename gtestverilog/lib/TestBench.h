@@ -50,6 +50,9 @@ namespace gtestverilog {
 		/// @brief simulate a single half clock step
 		/// @note This will invert the current value on port 'i_clk'
 		void step() {
+			// notify virtual function - to allow any simulatino code to run with current clock value
+			onStepSimulateCombinatorial();
+
 			// evaluate core to allow combinatorial values to settle first
 			m_core->eval();
 
@@ -57,7 +60,7 @@ namespace gtestverilog {
 			m_core->i_clk = (m_core->i_clk) ? 0 : 1;
 
 			// notify virtual function - to allow any simulation code to run with the new clock value
-			onStepSimulate();
+			onStepSimulateSequential();
 
 			// evaluate the core
 			m_core->eval();
@@ -90,7 +93,8 @@ namespace gtestverilog {
 		}
 
 	protected:
-		virtual void onStepSimulate() {}
+		virtual void onStepSimulateCombinatorial() {}
+		virtual void onStepSimulateSequential() {}
 		virtual void onStep() {}
 
 	private:
