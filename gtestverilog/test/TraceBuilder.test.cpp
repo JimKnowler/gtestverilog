@@ -282,3 +282,20 @@ TEST(TraceBuilder, ShouldFailToAddEmptyPortValueSignal) {
              .port(test_port_0).signal({})
     );
 }
+
+TEST(TraceBuilder, ShouldAddSignalFromVectorAndInitialiserList) {
+    std::vector<uint32_t> steps1 = {3, 1};
+    Trace trace = TraceBuilder()
+        .port(test_port_1).signal(steps1).repeatEachStep(2).signal({2, 4}).repeatEachStep(2);
+    
+    const std::vector<Step>& steps = trace.getSteps();
+    ASSERT_EQ(steps.size(), 8);
+    ASSERT_EQ(std::get<uint32_t>(steps[0].port(test_port_1)), 3);
+    ASSERT_EQ(std::get<uint32_t>(steps[1].port(test_port_1)), 3);
+    ASSERT_EQ(std::get<uint32_t>(steps[2].port(test_port_1)), 1);
+    ASSERT_EQ(std::get<uint32_t>(steps[3].port(test_port_1)), 1);
+    ASSERT_EQ(std::get<uint32_t>(steps[4].port(test_port_1)), 2);
+    ASSERT_EQ(std::get<uint32_t>(steps[5].port(test_port_1)), 2);
+    ASSERT_EQ(std::get<uint32_t>(steps[6].port(test_port_1)), 4);
+    ASSERT_EQ(std::get<uint32_t>(steps[7].port(test_port_1)), 4);
+}

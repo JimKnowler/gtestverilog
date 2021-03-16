@@ -107,6 +107,22 @@ namespace gtestverilog {
         return *this;
     }
 
+    TraceBuilder& TraceBuilder::signal(const std::vector<uint32_t>& stepValues) {
+        if (!currentPort) {
+            throw std::logic_error("unable to add signal without current port");
+        }
+
+        if (stepValues.size() == 0) {
+            throw std::logic_error("unable to add zero-length signal");
+        }
+
+        concat();
+
+        currentSignal.insert(currentSignal.end(), stepValues.begin(), stepValues.end());
+
+        return *this;
+    }
+
     TraceBuilder& TraceBuilder::repeat(size_t repetitions) {
         applyModifier([=](std::vector<PortValue>& signal) {
             std::vector<PortValue> newSignal;

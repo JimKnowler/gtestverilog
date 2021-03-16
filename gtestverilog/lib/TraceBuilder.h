@@ -28,6 +28,10 @@ namespace gtestverilog {
         /// @note subsequent modifiers will be applied only to this signal, until concat() or allPorts() are called
         TraceBuilder& signal(const std::initializer_list<uint32_t>& stepValues);
 
+        /// @brief append a new signal to the current port
+        /// @note subsequent modifiers will be applied only to this signal, until concat() or allPorts() are called
+        TraceBuilder& signal(const std::vector<uint32_t>& stepValues);
+
         /// @brief repeat the current signal being added to the current port
         /// @example TraceBuilder().port(myPort).signal("abcd").repeat(2) => "abcdabcd" 
         TraceBuilder& repeat(size_t repetitions);
