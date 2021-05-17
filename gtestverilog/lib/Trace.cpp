@@ -1,6 +1,7 @@
 #include "Trace.h"
 
-#include <string.h>
+#include <cstring>
+#include <cmath>
 
 namespace gtestverilog {
     Trace::Trace() {
