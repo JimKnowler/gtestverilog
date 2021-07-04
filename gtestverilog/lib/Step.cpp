@@ -14,8 +14,8 @@ namespace gtestverilog {
         uint32_t portId = portDesc.id();
 
         if (!hasPort(&portDesc)) {
-            if (getNumPorts() == 32) {
-                throw std::logic_error("unable to add more than 32 ports");
+            if (getNumPorts() == 64) {
+                throw std::logic_error("unable to add more than 64 ports");
             }
         }
 
@@ -28,7 +28,7 @@ namespace gtestverilog {
 
     const PortValue& Step::port(const PortDescription& portDesc) const {
         if (!hasPort(&portDesc)) {
-            throw std::logic_error("unknown port");
+            throw std::logic_error("unknown port - Step::port");
         }
 
         auto it = ports.find(&portDesc);
@@ -36,7 +36,7 @@ namespace gtestverilog {
         return it->second;
     }
 
-    uint32_t Step::getPortMask() const {
+    uint64_t Step::getPortMask() const {
         return portMask;
     }
 
@@ -51,6 +51,6 @@ namespace gtestverilog {
             }
         }
 
-        throw std::logic_error("unknown port");
+        throw std::logic_error("unknown port - Step::getPortDescription");
     }
 }

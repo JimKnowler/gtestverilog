@@ -25,7 +25,7 @@ namespace gtestverilog {
         size_t getNumPorts() const;
 
         /// @brief get bitmask showing which ports are in use
-        uint32_t getPortMask() const;
+        uint64_t getPortMask() const;
 
         /// @brief get port description for port ID
         const PortDescription& getPortDescription(uint32_t portId) const;
@@ -35,6 +35,6 @@ namespace gtestverilog {
 
         std::map<const PortDescription*, PortValue> ports;
 
-        uint32_t portMask;
+        uint64_t portMask;
     };
 }

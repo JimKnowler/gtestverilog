@@ -24,7 +24,7 @@ namespace gtestverilog {
         steps.push_back(step);
     }
 
-    const uint32_t Trace::getPortMask() const {
+    const uint64_t Trace::getPortMask() const {
         if (steps.empty()) {
             return 0;
         } else {
@@ -33,7 +33,7 @@ namespace gtestverilog {
     }
 
     bool Trace::hasPort(uint32_t portId) const {
-        return 0 != (getPortMask() & (1 << portId));
+        return 0 != (getPortMask() & (uint64_t(1) << portId));
     }
 
     static void renderTimeline(std::ostream& os, size_t x, size_t numSteps) {
@@ -142,7 +142,7 @@ namespace gtestverilog {
 
         renderTimeline(os, maxPortLabelSize + 11, steps.size());
 
-        for (uint32_t portId=0; portId<32; portId++) {
+        for (uint32_t portId=0; portId<64; portId++) {
             if (!trace.hasPort(portId)) {
                 continue;
             }
@@ -176,7 +176,7 @@ namespace gtestverilog {
 
         size_t maxPortLabelSize = kMinPortLabelSize;
         
-        for (uint32_t portId=0; portId<32; portId++) {
+        for (uint32_t portId=0; portId<64; portId++) {
             if (!hasPort(portId)) {
                 continue;
             }
@@ -242,7 +242,7 @@ namespace gtestverilog {
         const Step& step = steps[0];
         const Step& stepRhs = rhs.steps[0];
         
-        for (uint32_t portId=0; portId<32; portId++) {
+        for (uint32_t portId=0; portId<64; portId++) {
             if (!hasPort(portId)) {
                 continue;
             }

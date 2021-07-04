@@ -19,13 +19,13 @@ namespace matches_trace {
             return false;
         }
 
-        const uint32_t portMaskActual = actual.getPortMask();
-        const uint32_t portMaskExpected = expected.getPortMask();
+        const uint64_t portMaskActual = actual.getPortMask();
+        const uint64_t portMaskExpected = expected.getPortMask();
 
-        const uint32_t portMaskOverlap = portMaskActual & portMaskExpected;
+        const uint64_t portMaskOverlap = portMaskActual & portMaskExpected;
 
-        for (uint32_t portId=0; portId<32; portId++) {
-            if (0 == (portMaskOverlap & (1 << portId))) {
+        for (uint32_t portId=0; portId<64; portId++) {
+            if (0 == (portMaskOverlap & (uint64_t(1) << portId))) {
                 continue;
             }
 

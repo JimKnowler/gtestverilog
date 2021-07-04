@@ -73,22 +73,22 @@ TEST(Step, ShouldGetPortMask) {
     ASSERT_EQ(0x0F, step.getPortMask());
 }
 
-TEST(Step, ShouldAddMaximumOf32Ports) {
+TEST(Step, ShouldAddMaximumOf64Ports) {
     Step step;
-    PortDescription portDescs[33];
-    for (int i=0; i<32; i++) {
+    PortDescription portDescs[65];
+    for (int i=0; i<64; i++) {
         PortDescription& portDesc = portDescs[i];
         portDesc = PortDescription(i, "temp test port", 1);
 
         step.port(portDesc) = true;
     }
 
-    // should throw when adding 32nd port
-    PortDescription portDesc32(32, "temp test port", 1);
-    ASSERT_ANY_THROW(step.port(portDesc32));
+    // should throw when adding 65th port
+    PortDescription portDesc64(64, "temp test port", 1);
+    ASSERT_ANY_THROW(step.port(portDesc64));
 
-    // should be able to access the first 32 ports
-    for (int i=0; i<32; i++) {
+    // should be able to access the first 64 ports
+    for (int i=0; i<64; i++) {
         ASSERT_EQ(true, std::get<bool>(step.port(portDescs[i])));
     }
 }

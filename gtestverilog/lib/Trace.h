@@ -22,7 +22,7 @@ namespace gtestverilog {
 
         /// @brief retrieve the port mask used by all steps in this trace
         /// @note will return 0 when trace has no steps
-        const uint32_t getPortMask() const;
+        const uint64_t getPortMask() const;
 
         /// @brief dump state of signal to output stream
         friend std::ostream& operator<<(std::ostream &os, const Trace& trace);
