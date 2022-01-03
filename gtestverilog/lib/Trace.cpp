@@ -2,8 +2,11 @@
 
 #include <cstring>
 #include <cmath>
+#include <iostream>
 
 namespace gtestverilog {
+    const size_t kMaxTraceRenderSize = 80;
+
     Trace::Trace() {
     }
 
@@ -137,10 +140,19 @@ namespace gtestverilog {
         os << ConsoleColour().reset();
 
         auto& steps = trace.getSteps();
+
+        std::vector<Step> stepsRender;
+
+        if (steps.size() <= kMaxTraceRenderSize) {
+            stepsRender = steps;
+        } else {
+            stepsRender = std::vector<Step>(steps.begin(), steps.begin() + kMaxTraceRenderSize);
+            os << "Note: Trace truncated to first " << kMaxTraceRenderSize << " steps\n";
+        }
         
         size_t maxPortLabelSize = trace.getMaxPortLabelSize();
 
-        renderTimeline(os, maxPortLabelSize + 11, steps.size());
+        renderTimeline(os, maxPortLabelSize + 11, stepsRender.size());
 
         for (uint32_t portId=0; portId<64; portId++) {
             if (!trace.hasPort(portId)) {
@@ -149,7 +161,7 @@ namespace gtestverilog {
 
             const PortDescription& portDesc = trace.getPortDescription(portId);
 
-            Trace::renderPort(os, maxPortLabelSize, portDesc, steps);
+            Trace::renderPort(os, maxPortLabelSize, portDesc, stepsRender);
         }
 
         return os;

@@ -1,7 +1,10 @@
 #include "MatchesTrace.h"
 
+#include <algorithm>
+
 namespace gtestverilog {
 namespace matches_trace {
+    const size_t kMaxTraceRenderSize = 80;
 
     bool compare(const Trace& actual, const Trace& expected, ::testing::MatchResultListener& listener) {
         bool hasMatched = true;
@@ -43,18 +46,37 @@ namespace matches_trace {
                                 << ConsoleColour().reset()
                                 << "\n";
 
+                        std::vector<Step> stepsExpectedRender;
+                        std::vector<Step> stepsActualRender;
+
+                        size_t stepStart = 0;
+                        size_t stepEnd = sizeActual;
+
+                        if (sizeActual > kMaxTraceRenderSize) {
+                            stepStart = (step > (kMaxTraceRenderSize/2)) ? step - (kMaxTraceRenderSize/2) : 0;
+                            stepEnd = std::min(stepEnd, stepStart + kMaxTraceRenderSize);
+
+                            listener << "Note: Diff truncated to steps " << stepStart << " to " << stepEnd << "\n";
+
+                            stepsExpectedRender = std::vector<Step>(stepsExpected.begin() + stepStart, stepsExpected.begin() + stepEnd);
+                            stepsActualRender = std::vector<Step>(stepsActual.begin() + stepStart, stepsActual.begin() + stepEnd);
+                        } else {
+                            stepsExpectedRender = stepsExpected;
+                            stepsActualRender = stepsActual;
+                        }
+
                         size_t maxPortLabelSize = expected.getMaxPortLabelSize();
 
                         listener << "\n";
                         listener << "Expected:";
-                        Trace::renderPortDiff(*(listener.stream()), 'v', ConsoleColour::kGreen, maxPortLabelSize-9, portDesc, stepsExpected, stepsActual);
+                        Trace::renderPortDiff(*(listener.stream()), 'v', ConsoleColour::kGreen, maxPortLabelSize-9, portDesc, stepsExpectedRender, stepsActualRender);
 
-                        Trace::renderPort(*(listener.stream()), maxPortLabelSize, portDesc, stepsExpected);
+                        Trace::renderPort(*(listener.stream()), maxPortLabelSize, portDesc, stepsExpectedRender);
 
                         listener << "  Actual:";
-                        Trace::renderPortDiff(*(listener.stream()), 'v', ConsoleColour::kRed, maxPortLabelSize-9, portDesc, stepsExpected, stepsActual);
+                        Trace::renderPortDiff(*(listener.stream()), 'v', ConsoleColour::kRed, maxPortLabelSize-9, portDesc, stepsExpectedRender, stepsActualRender);
 
-                        Trace::renderPort(*(listener.stream()), maxPortLabelSize, portDesc, stepsActual);
+                        Trace::renderPort(*(listener.stream()), maxPortLabelSize, portDesc, stepsActualRender);
                     }
 
                     hasMatched = false;

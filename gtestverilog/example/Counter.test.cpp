@@ -77,3 +77,15 @@ TEST_F(Counter, ShouldSimulate) {
 
     ASSERT_THAT(testBench.trace, MatchesTrace(traceExpected));
 }
+
+TEST_F(Counter, ShouldHandleLargeTraces) {
+    testBench.reset();
+    testBench.tick(1000);
+
+    const Trace traceExpected = TraceBuilder()
+        .port(i_clk).signal( "10" ).repeat(1001)
+        .port(i_simulate_combinatorial).signal( "01" ).repeat(1001)
+        .port(i_simulate_sequential).signal( "10" ).repeat(1001);
+
+    ASSERT_THAT(testBench.trace, MatchesTrace(traceExpected));
+}
