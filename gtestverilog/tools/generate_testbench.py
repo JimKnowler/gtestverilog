@@ -14,10 +14,12 @@ verilated_header_filepaths = []
 
 for filename in os.listdir(args.verilated_header_dir):
     if filename.endswith(".h"):
+        if (filename.find("__")) != -1:
+            continue
+
         verilated_header_filepaths.append( os.path.join(args.verilated_header_dir, filename) )
 
 ports = []
-
 
 verilated_header_filepath = None
 
@@ -32,6 +34,9 @@ for filepath in verilated_header_filepaths:
                 name = results.group(1)
                 hi = results.group(2)
                 lo = results.group(3)
+
+                name = name.lstrip("&")
+
                 ports.append({
                     "name": name,
                     "hi": hi,

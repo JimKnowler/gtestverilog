@@ -18,9 +18,8 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "rules_verilator",
-    strip_prefix = "rules_verilator-0.1-rc4",
-    sha256 = "c0d7a13f586336ab12ea60cbfca226b660a39c6e8235ac1099e39dd2ace3166f",                                                                                                                                                       
-    url = "https://github.com/kkiningh/rules_verilator/archive/v0.1-rc4.zip",
+    strip_prefix = "rules_verilator-jim-rc1",
+    url = "https://github.com/JimKnowler/rules_verilator/archive/jim-rc1.zip",
 )
 
 load(
