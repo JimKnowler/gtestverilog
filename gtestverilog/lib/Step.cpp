@@ -21,7 +21,7 @@ namespace gtestverilog {
 
         PortValue& value = ports[&portDesc];
 
-        portMask |= (1 << portId);
+        portMask |= (uint64_t(1) << portId);
 
         return value;
     }
